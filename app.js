@@ -69,7 +69,7 @@ mongoose.connect("mongodb://localhost/yelp_camp_v6");
 // make index page for app
 
 app.get("/",function(req,res){
-	res.render("home");
+	res.render("home",{currentUser:req.user});
 });
 
 //make campgrounds page route
@@ -86,7 +86,7 @@ app.get("/campgrounds",function(req,res){
 		else{
 			console.log(" finding data done successfully");
 			
-			res.render("campgrounds/campgrounds",{campgrounds:allCampgrounds});
+			res.render("campgrounds/campgrounds",{campgrounds:allCampgrounds,currentUser:req.user});
 		}
 	});
 	// res.render("campgrounds",{campgrounds:campgrounds});
@@ -128,7 +128,7 @@ app.post("/campgrounds",function(req,res){
 // NEW route
 
 app.get("/campgrounds/new",function(req,res){
-	res.render("campgrounds/newform");
+	res.render("campgrounds/newform",{currentUser:req.user});
 });
 
 // SHOW route- to show more info about a specific item/campoground
@@ -143,7 +143,7 @@ app.get("/campgrounds/:id",function(req,res){
 		else{
 			console.log(foundCampground);
 			// render the show template with that campground
-			res.render("campgrounds/show",{campground:foundCampground});
+			res.render("campgrounds/show",{campground:foundCampground,currentUser:req.user});
 		}
 	});
 });
@@ -158,7 +158,7 @@ app.get("/campgrounds/:id/comments/new",isLoggedIn,function(req,res){
 			console.log(err);
 		}
 		else{
-			res.render("comments/new",{campground:campground});
+			res.render("comments/new",{campground:campground,currentUser:req.user});
 		}
 	})
 })
@@ -188,7 +188,7 @@ app.post("/campgrounds/:id/comments",isLoggedIn,function(req,res){
 
 // show register form
 app.get("/register",function(req,res){
-	res.render("register");
+	res.render("register",{currentUser:req.user});
 });
 // handle signup logic
 app.post("/register",function(req,res){
@@ -196,7 +196,7 @@ app.post("/register",function(req,res){
 	User.register(newUser,req.body.password,function(err,user){
 		if(err){
 			console.log(err);
-			return res.render("register");
+			return res.render("register",{currentUser:req.user});
 		}
 		else{
 			passport.authenticate("local")(req,res,function(){
@@ -209,7 +209,7 @@ app.post("/register",function(req,res){
 
 // Show login form
 app.get("/login",function(req,res){
-	res.render("login");
+	res.render("login",{currentUser:req.user});
 });
 
 // Handle Login logic
