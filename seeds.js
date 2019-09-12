@@ -37,36 +37,43 @@ var data=[
 function seedDB(){
 	// remove data from campground
 	Campground.deleteMany({},function(err){
-		// if(err){
-		// 	console.log(err);
-		// }
-		// console.log("removed");
-		// // add a few camprounds
-		// data.forEach(function(seed){
-		// 	Campground.create(seed,function(err,campground){
-		// 		if(err){
-		// 			console.log(err);
-		// 		}
-		// 		else{
-		// 			console.log("added a new campground");
-		// 			// create comment
-		// 			Comment.create(
-		// 				{
-		// 					text:"This place is great but i wish there was Internet",
-		// 					author:"Srijan"
-		// 				},function(err,comment){
-		// 					if(err){
-		// 						console.log(err);
-		// 					}
-		// 					else{
-		// 						campground.comments.push(comment);
-		// 						campground.save();
-		// 						console.log("created new comment")
-		// 					}
-		// 			});
-		// 		}
-		// 	});
-		// });	
+		if(err){
+			console.log(err);
+		}
+		console.log("removed");
+		Comment.deleteMany({},function(err){
+			if(err){
+				console.log(err);
+			}
+			console.log("removed comments");
+			// add a few camprounds
+			data.forEach(function(seed){
+				Campground.create(seed,function(err,campground){
+					if(err){
+						console.log(err);
+					}
+					else{
+						console.log("added a new campground");
+						// create comment
+						Comment.create(
+							{
+								text:"This place is great but i wish there was Internet",
+								author:"Srijan"
+							},function(err,comment){
+								if(err){
+									console.log(err);
+								}
+								else{
+									campground.comments.push(comment);
+									campground.save();
+									console.log("created new comment")
+								}
+						});
+					}
+				});
+			});	
+		});
+			
 	});
 }
 
