@@ -9,3 +9,7 @@ body{
 .thumbnail{
 	padding: 0;
 }
+#delete-form{
+	display: inline;
+	margin-left: 4%;
+}

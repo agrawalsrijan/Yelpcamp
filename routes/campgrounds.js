@@ -101,6 +101,18 @@ router.put("/campgrounds/:id",function(req,res){
 		}
 	})
 	//redirect somewhere
+});
+
+// Destroy route
+router.delete("/campgrounds/:id",function(req,res){
+	Campground.findByIdAndRemove(req.params.id,function(err){
+		if(err){
+			console.log(err);
+			res.redirect("/campgrounds");
+		}else{
+			res.redirect("/campgrounds");
+		}
+	})
 })
 // middleware to check if someone is logged in on the session
 function isLoggedIn(req,res,next){
