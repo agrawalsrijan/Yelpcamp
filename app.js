@@ -2,6 +2,7 @@ const express = require("express");
 const app=express();
 var bodyParser=require("body-parser");
 var mongoose=require("mongoose");
+var methodOverride=require("method-override");
 var passport=require("passport");
 var LocalStrategy=require("passport-local");
 var passportLocalMongoose=require("passport-local-mongoose");
@@ -35,6 +36,7 @@ passport.deserializeUser(User.deserializeUser());
 // set view engine as ejs
 app.set("view engine","ejs");
 app.use(express.static(__dirname+"/public"));
+app.use(methodOverride("_method"));
 
 // USe this to pass the req.user to every route -small and easy way to do
 

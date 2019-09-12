@@ -2,8 +2,6 @@ var express=require("express");
 var router=express.Router();
 var Campground=require("../models/campground");
 
-
-
 //make campgrounds page route
 // index route
 
@@ -21,8 +19,6 @@ router.get("/campgrounds",function(req,res){
 			res.render("campgrounds/campgrounds",{campgrounds:allCampgrounds,currentUser:req.user});
 		}
 	});
-	// res.render("campgrounds",{campgrounds:campgrounds});
-
 })
 
 // add a post route to same campgrounds-convention
@@ -54,9 +50,7 @@ router.post("/campgrounds",isLoggedIn,function(req,res){
 			res.redirect("/campgrounds");
 			// by default redirects go to get routes
 		}
-	})
-
-	
+	})	
 });
 
 // add another route seperatley for a form
@@ -83,6 +77,31 @@ router.get("/campgrounds/:id",function(req,res){
 		}
 	});
 });
+
+// EDIT Campground route
+router.get("/campgrounds/:id/edit",function(req,res){
+	Campground.findById(req.params.id,function(err,foundCampground){
+		if(err){
+			console.log(err);
+			res.redirect("/campgrounds")
+		}else{
+			res.render("campgrounds/edit",{campground:foundCampground,currentUser:req.user});
+		}
+	});
+});
+
+// UPDATE Campground route
+router.put("/campgrounds/:id",function(req,res){
+	//find and update correct campground
+	Campground.findByIdAndUpdate(req.params.id,req.body.campground,function(err,updatedCampground){
+		if(err){
+			res.redirect("/campgrounds");
+		}else{
+			res.redirect("/campgrounds/"+req.params.id);
+		}
+	})
+	//redirect somewhere
+})
 // middleware to check if someone is logged in on the session
 function isLoggedIn(req,res,next){
 	if (req.isAuthenticated()){
