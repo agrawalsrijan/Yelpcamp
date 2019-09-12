@@ -28,14 +28,18 @@ router.get("/campgrounds",function(req,res){
 // add a post route to same campgrounds-convention
 // CREATE Route
 
-router.post("/campgrounds",function(req,res){
+router.post("/campgrounds",isLoggedIn,function(req,res){
 	//just checking if post route works
 	
 	// get data from forms to add to campgrounds array
 	var name=req.body.name;
 	var image=req.body.image;
 	var description=req.body.description;
-	var newCampground={name:name,image:image,description:description};
+	var author={
+		id:req.user._id,
+		username:req.user.username
+	}
+	var newCampground={name:name,image:image,description:description,author:author};
 	// campgrounds.push(newCampground); old method without db
 
 	//create new campground and add it to db
@@ -59,7 +63,7 @@ router.post("/campgrounds",function(req,res){
 // the form data will be sent to the campgrounds-post route
 // NEW route
 
-router.get("/campgrounds/new",function(req,res){
+router.get("/campgrounds/new",isLoggedIn,function(req,res){
 	res.render("campgrounds/newform",{currentUser:req.user});
 });
 
