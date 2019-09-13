@@ -40,10 +40,10 @@ app.use(methodOverride("_method"));
 
 // USe this to pass the req.user to every route -small and easy way to do
 
-// app.use(function(req,res,next){
-// 	res.locals.currentUser=req.user;
-// 	next();
-// });
+app.use(function(req,res,next){
+	res.locals.currentUser=req.user;
+	next();
+});
 
 // mongoose stuff
 mongoose.set('useNewUrlParser', true);
