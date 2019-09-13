@@ -1,6 +1,7 @@
 var express=require("express");
 var router=express.Router();
 var Campground=require("../models/campground");
+var middleware=require("../middleware");
 
 //make campgrounds page route
 // index route
@@ -24,7 +25,7 @@ router.get("/campgrounds",function(req,res){
 // add a post route to same campgrounds-convention
 // CREATE Route
 
-router.post("/campgrounds",isLoggedIn,function(req,res){
+router.post("/campgrounds",middleware.isLoggedIn,function(req,res){
 	//just checking if post route works
 	
 	// get data from forms to add to campgrounds array
@@ -57,7 +58,7 @@ router.post("/campgrounds",isLoggedIn,function(req,res){
 // the form data will be sent to the campgrounds-post route
 // NEW route
 
-router.get("/campgrounds/new",isLoggedIn,function(req,res){
+router.get("/campgrounds/new",middleware.isLoggedIn,function(req,res){
 	res.render("campgrounds/newform",{currentUser:req.user});
 });
 
@@ -79,7 +80,7 @@ router.get("/campgrounds/:id",function(req,res){
 });
 
 // EDIT Campground route
-router.get("/campgrounds/:id/edit",checkCampgroundOwnership,function(req,res){
+router.get("/campgrounds/:id/edit",middleware.checkCampgroundOwnership,function(req,res){
 	//is user logged in
 	Campground.findById(req.params.id,function(err,foundCampground){
 		res.render("campgrounds/edit",{campground:foundCampground,currentUser:req.user});
@@ -87,7 +88,7 @@ router.get("/campgrounds/:id/edit",checkCampgroundOwnership,function(req,res){
 });
 
 // UPDATE Campground route
-router.put("/campgrounds/:id",checkCampgroundOwnership,function(req,res){
+router.put("/campgrounds/:id",middleware.checkCampgroundOwnership,function(req,res){
 	//find and update correct campground
 	Campground.findByIdAndUpdate(req.params.id,req.body.campground,function(err,updatedCampground){
 		if(err){
@@ -100,7 +101,7 @@ router.put("/campgrounds/:id",checkCampgroundOwnership,function(req,res){
 });
 
 // Destroy route
-router.delete("/campgrounds/:id",checkCampgroundOwnership,function(req,res){
+router.delete("/campgrounds/:id",middleware.checkCampgroundOwnership,function(req,res){
 	Campground.findByIdAndRemove(req.params.id,function(err){
 		if(err){
 			console.log(err);
@@ -111,34 +112,7 @@ router.delete("/campgrounds/:id",checkCampgroundOwnership,function(req,res){
 	})
 })
 // middleware to check if someone is logged in on the session
-function isLoggedIn(req,res,next){
-	if (req.isAuthenticated()){
-		return next();
-	}
-	else{
-		res.redirect("/login");
-	}
-}
-function checkCampgroundOwnership(req,res,next){
-	if(req.isAuthenticated()){
-		Campground.findById(req.params.id,function(err,foundCampground){
-			if(err){
-				console.log(err);
-				res.redirect("back")
-			}else{
-				// does user owns campground?
-				if(foundCampground.author.id.equals(req.user._id)){
-					next();
-				}else{
-					res.redirect("back");
-				}
-				
-			}
-		});
-	}else{
-		console.log("You must be logged in to do that!!!!");
-		res.redirect("back");
-	}
-}
+// middlewares shifted to their own folders
+
 
 module.exports=router;
