@@ -22,11 +22,14 @@ router.post("/register",function(req,res){
 	var newUser=new User({username:req.body.username});
 	User.register(newUser,req.body.password,function(err,user){
 		if(err){
+
 			console.log(err);
-			return res.render("register",{currentUser:req.user});
+			req.flash("error",err.message);
+			return res.redirect("/register",{currentUser:req.user});
 		}
 		else{
 			passport.authenticate("local")(req,res,function(){
+				req.flash("success","You were registered Successfully");
 				res.redirect("/campgrounds");
 			});
 		}
@@ -51,6 +54,7 @@ router.post("/login",passport.authenticate("local",{
 // Logout route
 router.get("/logout",function(req,res){
 	req.logout();
+	req.flash("success","You have been Logged out");
 	res.redirect("/campgrounds");
 });
 

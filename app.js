@@ -1,6 +1,7 @@
 const express = require("express");
 const app=express();
 var bodyParser=require("body-parser");
+var flash=require("connect-flash");
 var mongoose=require("mongoose");
 var methodOverride=require("method-override");
 var passport=require("passport");
@@ -18,6 +19,7 @@ var indexRoutes=require("./routes/index");
 
 // use body parser by following code:
 app.use(bodyParser.urlencoded({extended:true}));
+app.use(flash());
 // use routes
 
 //express session
@@ -42,6 +44,8 @@ app.use(methodOverride("_method"));
 
 app.use(function(req,res,next){
 	res.locals.currentUser=req.user;
+	res.locals.error=req.flash("error");
+	res.locals.success=req.flash("success")
 	next();
 });
 

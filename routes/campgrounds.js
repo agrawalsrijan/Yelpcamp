@@ -42,9 +42,11 @@ router.post("/campgrounds",middleware.isLoggedIn,function(req,res){
 	//create new campground and add it to db
 	Campground.create(newCampground,function(err,newcampground){
 		if(err){
+			req.flash("error","Campground could not be created");
 			console.log(err);
 		}
 		else{
+			req.flash("success","New Campground was created successfully");
 			console.log("new campground added to db");
 			
 			// redirect back to the campgrounds(get) page
@@ -94,6 +96,7 @@ router.put("/campgrounds/:id",middleware.checkCampgroundOwnership,function(req,r
 		if(err){
 			res.redirect("/campgrounds");
 		}else{
+			req.flash("success","Campground Updated");
 			res.redirect("/campgrounds/"+req.params.id);
 		}
 	})
@@ -107,6 +110,7 @@ router.delete("/campgrounds/:id",middleware.checkCampgroundOwnership,function(re
 			console.log(err);
 			res.redirect("/campgrounds");
 		}else{
+			req.flash("success","Campground Deleted");
 			res.redirect("/campgrounds");
 		}
 	})
