@@ -6,21 +6,38 @@ var middleware=require("../middleware");
 //make campgrounds page route
 // index route
 
-router.get("/campgrounds",function(req,res){
+router.get("/campgrounds", function (req, res) {
+    var perPage = 8;
+    var pageQuery = parseInt(req.query.page);
+    var pageNumber = pageQuery ? pageQuery : 1;
+    Campground.find({}).skip((perPage * pageNumber) - perPage).limit(perPage).exec(function (err, allCampgrounds) {
+        Campground.count().exec(function (err, count) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.render("campgrounds/campgrounds", {
+                    campgrounds: allCampgrounds,
+                    current: pageNumber,
+                    pages: Math.ceil(count / perPage)
+                });
+            }
+        });
+    });
+});
 
-	// get Campground data from db
-	Campground.find({},function(err,allCampgrounds){
-		if(err){
-			console.log("something went wrong");
-			console.log(err);
-		}
-		else{
-			console.log(" finding data done successfully");
+// 	// get Campground data from db
+// 	Campground.find({},function(err,allCampgrounds){
+// 		if(err){
+// 			console.log("something went wrong");
+// 			console.log(err);
+// 		}
+// 		else{
+// 			console.log(" finding data done successfully");
 			
-			res.render("campgrounds/campgrounds",{campgrounds:allCampgrounds,currentUser:req.user});
-		}
-	});
-})
+// 			res.render("campgrounds/campgrounds",{campgrounds:allCampgrounds,currentUser:req.user});
+// 		}
+// 	});
+// })
 
 // add a post route to same campgrounds-convention
 // CREATE Route

@@ -54,8 +54,8 @@ mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 mongoose.set('useUnifiedTopology',true);
- mongoose.connect("mongodb://localhost/yelp_camp_v6");
-// mongoose.connect("mongodb+srv://srijanag13:GUd1Oh08I5c7OVDH@cluster0-xdlxp.mongodb.net/test?retryWrites=true&w=majority");
+ // mongoose.connect("mongodb://localhost/yelp_camp_v6");
+mongoose.connect("mongodb+srv://srijanag13:GUd1Oh08I5c7OVDH@cluster0-xdlxp.mongodb.net/test?retryWrites=true&w=majority");
 app.use(indexRoutes);
 app.use(campgroundRoutes);
 app.use(commentRoutes);
@@ -88,9 +88,9 @@ app.use(commentRoutes);
 
 //listen to server requests
 
-// app.listen(process.env.PORT,process.env.IP,function(){
-// 	console.log("Your yelpcamp server has started")
-// });
-app.listen(3000,function(){
+app.listen(process.env.PORT,process.env.IP,function(){
 	console.log("Your yelpcamp server has started")
 });
+// app.listen(3000,function(){
+// 	console.log("Your yelpcamp server has started")
+// });
